@@ -27,10 +27,10 @@ export async function getLatestNews(): Promise<NewsItem[]> {
   return latestNews as NewsItem[]
 }
 
-export async function getAvailableNewsYears(): Promise<number[]> {
+export async function getAvailableNewsYears(): Promise<string[]> {
   const yearsData = db
     .prepare('SELECT DISTINCT strftime(\'%Y\', date) as year FROM news')
-    .all() as { year: number }[]
+    .all() as { year: string }[]
 
   const years = yearsData.map((year) => year.year)
 
@@ -39,12 +39,12 @@ export async function getAvailableNewsYears(): Promise<number[]> {
   return years
 }
 
-export async function getAvailableNewsMonths(year: number | string): Promise<number[]> {
+export async function getAvailableNewsMonths(year: string): Promise<string[]> {
   const monthData = db
     .prepare(
       'SELECT DISTINCT strftime(\'%m\', date) as month FROM news WHERE strftime(\'%Y\', date) = ?',
     )
-    .all(+year) as { month: number }[]
+    .all(year) as { month: string }[]
   return monthData.map((month) => month.month)
 }
 
@@ -65,7 +65,7 @@ export async function getNewsForYearAndMonth(year: number | string, month: numbe
     .prepare(
       'SELECT * FROM news WHERE strftime(\'%Y\', date) = ? AND strftime(\'%m\', date) = ? ORDER BY date DESC',
     )
-    .all(+year, +month) as NewsItem[]
+    .all(year, month) as NewsItem[]
 
   await new Promise((resolve) => setTimeout(resolve, 2000))
 
