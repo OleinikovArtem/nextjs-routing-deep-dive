@@ -7,6 +7,5 @@ export const config = {
 
 export function middleware(request: NextRequest) {
   // some instructions
-  console.log(request)
   return NextResponse.next()
 }

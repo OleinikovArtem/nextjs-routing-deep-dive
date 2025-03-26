@@ -8,18 +8,19 @@ export default async function FilteredNewsPage({ params }: Readonly<{ params: Pr
   const selectedYear = filter?.[0]
   const selectedMonth = filter?.[1]
 
-  const availableYears = getAvailableNewsYears()
+  const availableYears = await getAvailableNewsYears()
+  const availableMonths = selectedYear ?  await getAvailableNewsMonths(selectedYear) : null
 
   let links = availableYears
   let news: NewsItem[] = [];
 
   if (selectedYear && !selectedMonth) {
-    news = getNewsForYear(selectedYear)
-    links = getAvailableNewsMonths(selectedYear)
+    news = await getNewsForYear(selectedYear)
+    links = await getAvailableNewsMonths(selectedYear)
   }
 
   if (selectedYear && selectedMonth) {
-    news = getNewsForYearAndMonth(selectedYear, selectedMonth)
+    news = await getNewsForYearAndMonth(selectedYear, selectedMonth)
     links = []
   }
 
@@ -31,7 +32,7 @@ export default async function FilteredNewsPage({ params }: Readonly<{ params: Pr
 
   if (
     selectedYear && !availableYears.includes(+selectedYear) ||
-    selectedMonth && !getAvailableNewsMonths(selectedYear).includes(+selectedMonth)
+    selectedMonth && !availableMonths?.includes(+selectedMonth)
   ) {
     throw new Error('Invalid filter, please use a valid year and month')
   }

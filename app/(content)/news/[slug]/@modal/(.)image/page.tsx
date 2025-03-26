@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation'
-import { DUMMY_NEWS } from '@/dummy-news'
 import { ModalBackdrop } from '@/components/modal-backdrop'
+import { getNewsItem } from '@/lib/news'
 
 export default async function InterceptedImagePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const newsItem = DUMMY_NEWS.find(item => item.slug === slug)
+  const newsItem = await getNewsItem(slug)
 
   if (!newsItem) notFound()
 
