@@ -19,10 +19,10 @@ export function getAvailableNewsYears(): number[] {
   }, []).sort((a, b) => b - a)
 }
 
-export function getAvailableNewsMonths(year: number): number[] {
+export function getAvailableNewsMonths(year: number | string): number[] {
   return DUMMY_NEWS.reduce<number[]>((months, news) => {
     const newsYear = new Date(news.date).getFullYear()
-    if (newsYear === year) {
+    if (newsYear === Number(year)) {
       const month = new Date(news.date).getMonth() + 1
       if (!months.includes(month)) {
         months.push(month)
@@ -32,14 +32,14 @@ export function getAvailableNewsMonths(year: number): number[] {
   }, []).sort((a, b) => b - a)
 }
 
-export function getNewsForYear(year: number): NewsItem[] {
-  return DUMMY_NEWS.filter((news) => new Date(news.date).getFullYear() === year)
+export function getNewsForYear(year: number | string): NewsItem[] {
+  return DUMMY_NEWS.filter((news) => new Date(news.date).getFullYear() === Number(year))
 }
 
-export function getNewsForYearAndMonth(year: number, month: number): NewsItem[] {
+export function getNewsForYearAndMonth(year: number | string, month: number | string): NewsItem[] {
   return DUMMY_NEWS.filter((news) => {
     const newsYear = new Date(news.date).getFullYear()
     const newsMonth = new Date(news.date).getMonth() + 1
-    return newsYear === year && newsMonth === month
+    return newsYear === Number(year) && newsMonth === Number(month)
   })
 }
